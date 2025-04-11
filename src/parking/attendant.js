@@ -5,16 +5,10 @@ class Attendant {
   }
 
   park(car) {
-    if (!car) {
-      throw new Error("Car is required");
-    }
     return this.parkingLot.park(car);
   }
 
   unpark(ticket) {
-    if (!ticket) {
-      throw new Error("Ticket is required");
-    }
     return this.parkingLot.out(ticket);
   }
 }

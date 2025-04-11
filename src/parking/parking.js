@@ -18,6 +18,9 @@ class ParkingLot {
   }
 
   out(ticket) {
+    if (!ticket) {
+      throw new Error("Ticket is required");
+    }
     if (!this.listTicket.has(ticket)) {
       throw new Error("Ticket is not match");
     }
