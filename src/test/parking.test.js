@@ -1,34 +1,60 @@
 const ParkingLot = require("../parking/parking");
+const Attendant = require("../parking/attendant");
 
-describe("ParkingLot", () => {
-  it("Car Parked", () => {
+describe("ParkingLot and Attendant", () => {
+  it("should park a car and return a ticket", () => {
     const parking = new ParkingLot(10, 0);
     const ticket = parking.park("B 1234 ABC");
-
     expect(ticket).toBe("B 1234 ABC-1");
   });
 
-  it("should return slot is not available when slot = 0", () => {
+  it("should return 'Slot not available' when no slots are available", () => {
     const parking = new ParkingLot(0, 0);
     const ticket = parking.park("B 1234 ABC");
     expect(ticket).toBe("Slot not available");
   });
 
-  it("Car Out", () => {
+  it("should unpark a car and return a success message", () => {
     const parking = new ParkingLot(10, 0);
-    const car = parking.park("B 1234 ABC");
-    const car2 = parking.park("B 5678 ABC");
-    const ticket = parking.out(car);
-    expect(ticket).toBe("B 1234 ABC-1 has been out of Parkir, Thank You!");
+    const ticket = parking.park("B 1234 ABC");
+    const message = parking.out(ticket);
+    expect(message).toBe("B 1234 ABC-1 has been out of Parkir, Thank You!");
   });
 
-  it("Should throw error if ticket not match", () => {
+  it("should throw an error if the ticket does not match", () => {
     const parking = new ParkingLot(10, 0);
     expect(() => parking.out("Invalid-Ticket")).toThrow("Ticket is not match");
   });
 
-  it("Should throw error if car is missing", () => {
+  it("should throw an error if no car is provided", () => {
     const parking = new ParkingLot(10, 0);
     expect(() => parking.park("")).toThrow("Car is required");
+  });
+
+  it("should use Attendant to park a car", () => {
+    const parkingLot = new ParkingLot(10, 0);
+    const attendant = new Attendant(parkingLot);
+    const ticket = attendant.park("B 1234 ABC");
+    expect(ticket).toBe("B 1234 ABC-1");
+  });
+
+  it("should use Attendant to unpark a car", () => {
+    const parkingLot = new ParkingLot(10, 0);
+    const attendant = new Attendant(parkingLot);
+    const ticket = attendant.park("B 1234 ABC");
+    const message = attendant.unpark(ticket);
+    expect(message).toBe("B 1234 ABC-1 has been out of Parkir, Thank You!");
+  });
+
+  it("should throw an error if Attendant tries to park without a car", () => {
+    const parkingLot = new ParkingLot(10, 0);
+    const attendant = new Attendant(parkingLot);
+    expect(() => attendant.park("")).toThrow("Car is required");
+  });
+
+  it("should throw an error if Attendant tries to unpark without a ticket", () => {
+    const parkingLot = new ParkingLot(10, 0);
+    const attendant = new Attendant(parkingLot);
+    expect(() => attendant.unpark("")).toThrow("Ticket is required");
   });
 });

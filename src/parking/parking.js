@@ -18,7 +18,6 @@ class ParkingLot {
   }
 
   out(ticket) {
-    console.log(this.listTicket);
     if (!this.listTicket.has(ticket)) {
       throw new Error("Ticket is not match");
     }
